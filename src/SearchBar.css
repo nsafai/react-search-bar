@@ -20,7 +20,7 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   text-align: start;
   border-radius: 5px;
 }
