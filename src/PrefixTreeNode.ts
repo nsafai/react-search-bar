@@ -1,13 +1,6 @@
-import { PrefixTree } from "./PrefixTree";
-
-// PrefixTreeNode: A node for use in a prefix tree that stores a single
-// character from a string and a structure of children nodes below it, which
-// associates the next character in a string to the next node along its path from
-// the tree's root node to a terminal node that marks the end of the string.
-
 export type PrefixTreeNode = {
   character: string,
-  terminal: boolean,
+  terminal: boolean, // this node us the last character of a string in a prefix tree
   children: Map<string, PrefixTreeNode>,
 }
 
