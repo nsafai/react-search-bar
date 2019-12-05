@@ -1,6 +1,12 @@
 # React SearchBar
 A re-usable React Search Bar component that displays its results
 
+### Technologies
+React, Typescript
+
+### Implementation details
+Built using a prefix tree, or "trie"
+
 ### Available Scripts
 
 In the project directory, you can run:
