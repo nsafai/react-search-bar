@@ -1,0 +1,36 @@
+* {
+  font-family: Helvetica, sans-serif, Arial;
+  color: darkslategray;
+}
+
+.search-bar {
+  padding: 0.5em 1em;
+  font-size: 1em;
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: white;
+  margin: 0 0 0.5em 0;
+}
+
+.search-bar:focus {
+  border-color: green;
+}
+
+.all-results {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: start;
+  border-radius: 5px;
+}
+
+.result {
+  text-decoration: none;
+  padding: 0.25em 1.0em;
+}
+
+.result:hover {
+  background-color: green;
+  color: white;
+}
