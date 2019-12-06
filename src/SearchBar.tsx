@@ -1,5 +1,5 @@
 import React from 'react';
-import { createTree, findNode, traverse, complete } from "./PrefixTree";
+import { createTree, findNode, traverse, complete, strings, contains } from "./PrefixTree";
 import './SearchBar.css';
 
 interface PublicProps {
@@ -11,12 +11,15 @@ interface PublicProps {
 
 const SearchBar: React.FC<PublicProps> = (props: PublicProps) => {
   const examples = ['clever', 'classic', 'test'];
-  
+
   const tree = createTree(examples);
   console.log(tree); // works
 
   const completions = complete(tree, 'cl');
   console.log("should be clever and classic:", completions);
+
+  const allStrings = strings(tree);
+  console.log('allStrings:', allStrings);
 
   return (
     <div className="container">

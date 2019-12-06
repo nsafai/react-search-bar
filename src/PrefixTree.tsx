@@ -50,7 +50,7 @@ function insertString(tree: PrefixTree, str: string) {
     }
 }
 
-export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, visit: (result: string) => void) {
+export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, visit: (result: string) => number) {
     /* Traverse this prefix tree with recursive depth-first traversal.
 Start at the given node and visit each node with the given function. */
 
@@ -105,20 +105,19 @@ export function findNode(tree: PrefixTree, str: string) {
     return node
 }
 
-// export function strings(tree: PrefixTree) {
-//     // Return a list of all strings stored in this prefix tree.
-//     let all_strings: string[] = [];
-//     traverse(tree, tree.root, "", all_strings.push)
-//     return all_strings
-// }
+export function strings(tree: PrefixTree) {
+    // Return a list of all strings stored in this prefix tree.
+    let all_strings: string[] = [];
+    traverse(tree, tree.root, "", all_strings.push)
+    return all_strings
+}
 
-// function contains(tree: PrefixTree, str: string) {
-//     // Return True if this prefix tree contains the given string.
-//     // if find_node returns a node as first part of tuple
-//     const node: PrefixTreeNode | null = findNode(tree, str)
-//     if (node) {
-//         return node.terminal === true;
-//     } else {
-//         return false;
-//     }
-// }
+export function contains(tree: PrefixTree, str: string) {
+    // Return True if this prefix tree contains the given string.
+    const node: PrefixTreeNode | null = findNode(tree, str)
+    if (node) {
+        return node.terminal === true;
+    } else {
+        return false;
+    }
+}
