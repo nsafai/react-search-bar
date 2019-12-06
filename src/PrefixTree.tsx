@@ -50,12 +50,11 @@ function insertString(tree: PrefixTree, str: string) {
     }
 }
 
-export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, visit: (result: string) => number) {
+export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, visit: (r: string) => void) {
     /* Traverse this prefix tree with recursive depth-first traversal.
-Start at the given node and visit each node with the given function. */
+    Start at the given node and visit each node with the given function. */
 
     node.children.forEach((child_node, char) => { 
-        console.log(char + ":" + child_node);
         const new_prefix = prefix + char;
         if (node.terminal) {
             visit(new_prefix);
@@ -86,11 +85,10 @@ export function findNode(tree: PrefixTree, str: string) {
     in this prefix tree and the node's depth, or if the given string is not
     completely found, return None and the depth of the last matching node.
     Search is done iteratively with a loop starting from the root node. */
-
     if (str.length === 0) {
         return null
     }
-
+    // start at root node
     let node = tree.root
     for (const char of str) {
         const child_node = node.children.get(char)
