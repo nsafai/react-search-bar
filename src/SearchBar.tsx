@@ -1,5 +1,5 @@
-import React from 'react';
-import { createTree, complete } from "./PrefixTree";
+import React, { Component } from 'react';
+import { createTree, complete, PrefixTree } from "./PrefixTree";
 import './SearchBar.css';
 
 export interface PublicProps {
@@ -9,31 +9,47 @@ export interface PublicProps {
 
 export type Page = {
   name: string,
-  url: string | URL,
+  url: string,
 }
 
-const SearchBar: React.FC<PublicProps> = (props: PublicProps) => {
-  const searchTree = createTree(props.pages);
-  console.log(searchTree);
-  console.log(complete(searchTree, "Ho"));
+type SearchState = {
+  searchTerms: string,
+  searchTree: PrefixTree,
+}
 
-  return (
-    <div className="container">
-      <input 
-        className="search-bar" 
-        placeholder="Enter search terms"
-        width={props.width}
-      />
-      <div className="all-results">
-        <a className="result" href="/">Some title</a>
-        <a className="result" href="/">Some title</a>
+export class SearchBar extends Component<PublicProps, SearchState> {
+  state = {
+    searchTerms: '',
+    searchTree: createTree(this.props.pages),
+  }
+
+  updateSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ searchTerms: e.target.value });
+  }
+  
+  render() {
+    const { searchTerms, searchTree } = this.state;
+    let searchResults;
+    if (searchTerms) {
+      searchResults = (
+        <div className="all-results">
+          {complete(searchTree, searchTerms).map(result => {
+            return <a className="result" href={result.url}>{result.name}</a>;
+          })}
+        </div>
+      );
+    }
+    return (
+      <div className="container">
+        <input 
+          className="search-bar" 
+          placeholder="Enter search terms"
+          width={this.props.width}
+          value={this.state.searchTerms}
+          onChange={this.updateSearch}
+        />
+        {searchResults}
       </div>
-    </div>
-  );
+    );
+  }
 }
-
-SearchBar.defaultProps = {
-  // width:
-}
-
-export default SearchBar;
