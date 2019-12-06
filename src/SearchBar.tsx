@@ -11,12 +11,10 @@ interface PublicProps {
 
 const SearchBar: React.FC<PublicProps> = (props: PublicProps) => {
   const examples = ['clever', 'classic', 'test'];
+  
   const tree = createTree(examples);
-  // console.log(tree); // works
-  const exists = findNode(tree, 'cl');
-  // console.log("exists:", exists) // works
-  const doesNotExist = findNode(tree, 'clo');
-  // console.log("doesNotExist:", doesNotExist) // works
+  console.log(tree); // works
+
   const completions = complete(tree, 'cl');
   console.log("should be clever and classic:", completions);
 

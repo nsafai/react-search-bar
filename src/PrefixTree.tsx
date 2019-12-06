@@ -53,22 +53,15 @@ function insertString(tree: PrefixTree, str: string) {
 export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, visit: (result: string) => void) {
     /* Traverse this prefix tree with recursive depth-first traversal.
 Start at the given node and visit each node with the given function. */
-    console.log("TESTSTSTS")
 
-    node.children.forEach((val, key) => { 
-        console.log(key + ":" + val);
+    node.children.forEach((child_node, char) => { 
+        console.log(char + ":" + child_node);
+        const new_prefix = prefix + char;
+        if (node.terminal) {
+            visit(new_prefix);
+        }
+        traverse(tree, child_node, new_prefix, visit);
     });
-    // node.children.forEach((_: PrefixTreeNode, char: string) => {
-    //     const new_prefix = prefix + char
-    //     console.log(new_prefix)
-    //     const child_node = node.children.get(char);
-        // if (child_node !== undefined) {
-        //     if (child_node.terminal) {
-        //         visit(new_prefix)
-        //     }            
-        //     traverse(tree, child_node, new_prefix, visit)
-        // }
-    // });
 }
 
 export function complete(tree: PrefixTree, prefix: string) {
