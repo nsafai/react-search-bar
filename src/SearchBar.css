@@ -7,9 +7,10 @@
   padding: 0.5em 1em;
   font-size: 1em;
   outline: 0;
-  border-width: 0 0 2px;
-  border-color: white;
-  margin: 0 0 0.5em 0;
+  border-width: 1px;
+  min-width: 300px;
+  border-color: grey;
+  margin: 0 0 0.25em 0;
 }
 
 .search-bar:focus {
@@ -22,7 +23,7 @@
   flex-direction: column;
   justify-content: flex-start;
   text-align: start;
-  border-radius: 5px;
+  border-radius: 2px;
 }
 
 .result {
