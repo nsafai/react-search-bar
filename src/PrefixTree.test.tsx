@@ -6,8 +6,14 @@
 // console.log(tree); // works
 // assert size = 3
 
+// const completeWord = complete(tree, 'classic');
+// console.log("should be classic:", completeWord);
+
 // const completions = complete(tree, 'cl');
 // console.log("should be clever and classic:", completions);
+
+// const allStrings = strings(tree);
+// console.log('allStrings:', allStrings);
 
 // const findsExistingNode = findNode(tree, 'cle');
 // console.log("should be an object:", findsExistingNode)

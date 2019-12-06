@@ -1,3 +1,5 @@
+import { Page } from "./SearchBar";
+
 const START_CHARACTER = ''; // stored in the prefix tree's root node
 
 export type PrefixTree = {
@@ -7,11 +9,12 @@ export type PrefixTree = {
 
 export type PrefixTreeNode = {
     character: string,
+    url?: Page["url"], // only terminal nodes will have a URL
     terminal: boolean, // this node is the last character of a string
     children: Map<string, PrefixTreeNode>,
 }
   
-export function createTree(strings: string[]) {
+export function createTree(pages: Page[]) {
     const root: PrefixTreeNode = {
         character: START_CHARACTER,
         terminal: false,
@@ -21,63 +24,61 @@ export function createTree(strings: string[]) {
         size: 0,
         root: root,
     };
-    strings.forEach(str => insertString(tree, str));
+    pages.forEach(page => insertString(tree, page.name, page.url));
     return tree;
 }
 
-function insertString(tree: PrefixTree, str: string) {
-    let current_node: PrefixTreeNode = tree.root;
+function insertString(tree: PrefixTree, str: string, url: PrefixTreeNode["url"]) {
+    let currentNode: PrefixTreeNode = tree.root;
     for (const char of str) {        
-        const child_node = current_node.children.get(char)
+        const childNode = currentNode.children.get(char)
         // if child node doesn't exist yet
-        if (child_node === undefined) {
-            const child_node: PrefixTreeNode = {
+        if (childNode === undefined) {
+            const childNode: PrefixTreeNode = {
                 character: char,
                 terminal: false,
                 children: new Map<string, PrefixTreeNode>(),
             }
-            current_node.children.set(char, child_node)
-            current_node = child_node
+            currentNode.children.set(char, childNode);
+            currentNode = childNode;
         } else {
             // if child node does exist, we keep moving down
-            current_node = child_node
+            currentNode = childNode;
         }
     }
     // By this point, 'character' represents last char of the string
-    if (current_node && current_node.terminal === false) {
-        current_node.terminal = true;
-        tree.size += 1
+    if (currentNode && currentNode.terminal === false) {
+        currentNode.terminal = true;
+        currentNode.url = url;
+        tree.size += 1;
     }
 }
 
-export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, visit: (r: string) => void) {
+export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, results: Page[]) {
     /* Traverse this prefix tree with recursive depth-first traversal.
     Start at the given node and visit each node with the given function. */
-
-    node.children.forEach((child_node, char) => { 
-        const new_prefix = prefix + char;
-        if (node.terminal) {
-            visit(new_prefix);
-        }
-        traverse(tree, child_node, new_prefix, visit);
+    if (node.terminal && node.url) {
+        const page: Page = { name: prefix, url: node.url }
+        results.push(page);
+    }
+    node.children.forEach((childNode, char) => { 
+        const newPrefix = prefix + char;
+        traverse(tree, childNode, newPrefix, results);
     });
 }
 
 export function complete(tree: PrefixTree, prefix: string) {
     /* Return a list of all strings stored in this prefix tree that start
     with the given prefix string. */
-    let completions = [];
+    let results: Page[] = [];
     // find node with prefix
     const node = findNode(tree, prefix);
     if (node) {
-        if (node.terminal) {
-            completions.push(prefix)
-        }
         // use traverse from that node to get all possible endings, add them to completions
-        traverse(tree, node, prefix, completions.push)
+        traverse(tree, node, prefix, results)
     }
         
-    return completions
+    return results
 }
 
 export function findNode(tree: PrefixTree, str: string) {
@@ -91,9 +92,9 @@ export function findNode(tree: PrefixTree, str: string) {
     // start at root node
     let node = tree.root
     for (const char of str) {
-        const child_node = node.children.get(char)
-        if (child_node !== undefined) {
-                node = child_node;
+        const childNode = node.children.get(char)
+        if (childNode !== undefined) {
+                node = childNode;
         } else {
             // no matches for latest char in string
             return null
@@ -105,9 +106,9 @@ export function findNode(tree: PrefixTree, str: string) {
 
 export function strings(tree: PrefixTree) {
     // Return a list of all strings stored in this prefix tree.
-    let all_strings: string[] = [];
-    traverse(tree, tree.root, "", all_strings.push)
-    return all_strings
+    let results: Page[] = [];
+    traverse(tree, tree.root, "", results)
+    return results
 }
 
 export function contains(tree: PrefixTree, str: string) {
