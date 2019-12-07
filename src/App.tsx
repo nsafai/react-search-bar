@@ -6,6 +6,7 @@ const App: React.FC = () => {
   const pages: Page[] = [
     {name: "Home", url: "/"}, 
     {name: "About", url: "/about"},
+    {name: "Adam's website", url: "/adam"},
     {name: "Google", url: "http://www.google.com"}, 
     {name: "Reddit", url: "http://www.reddit.com"},
   ];

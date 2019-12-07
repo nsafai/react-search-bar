@@ -29,16 +29,14 @@ export class SearchBar extends Component<PublicProps, SearchState> {
   
   render() {
     const { searchTerms, searchTree } = this.state;
-    let searchResults;
-    if (searchTerms) {
-      searchResults = (
-        <div className="all-results">
-          {complete(searchTree, searchTerms).map(result => {
-            return <a className="result" href={result.url}>{result.name}</a>;
-          })}
-        </div>
-      );
+    const searchResults = complete(searchTree, searchTerms);
+    let resultsElement;
+    if (searchResults.length > 0) {
+      resultsElement = searchResults.map(result => <a className="result" href={result.url}>{result.name}</a>);
+    } else {
+      resultsElement = <p className="no-result">No results for '{searchTerms}'</p>
     }
+
     return (
       <div className="container">
         <input 
@@ -48,7 +46,9 @@ export class SearchBar extends Component<PublicProps, SearchState> {
           value={this.state.searchTerms}
           onChange={this.updateSearch}
         />
-        {searchResults}
+        <div className="all-results" style={searchTerms.length > 0 ? {} : {display: "none"}}>
+          {resultsElement}
+        </div>
       </div>
     );
   }
