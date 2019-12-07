@@ -26,31 +26,37 @@ export class SearchBar extends Component<PublicProps, SearchState> {
   }
 
   updateSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerms: e.target.value });
+    this.setState({ 
+      searchTerms: e.target.value,
+      selectedResult: -1, // resets to default value
+    });
   }
 
   handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>, numResults: number) => {
     const { selectedResult } = this.state;
-    // if press down arrow, move down 1 search result
-    if (e.keyCode === 40) {
-      const chosenResult = document.getElementById(`result-${selectedResult+1}`);
-      chosenResult && chosenResult.focus();
-      if (selectedResult < numResults - 1) {
-        this.setState({ selectedResult: this.state.selectedResult + 1 })
-      }
-    }
-    // if press up arrow, move up 1 search result
-    else if (e.keyCode === 38) {
-      const chosenResult = document.getElementById(`result-${selectedResult-1}`);
-      chosenResult && chosenResult.focus();
-      if (selectedResult >= 1) {
-        this.setState({ selectedResult: selectedResult - 1 })
-      }
-    }
-    // for all other keypresses, bring foocus back to search bar
-    else {
-      const searchBar = document.getElementById("search-bar");
-      searchBar && searchBar.focus();
+    let chosenResult;
+    switch(e.key) {
+      case('ArrowDown'):
+        // if press down arrow, check if we are in bounds, then move down 1 result
+        if (selectedResult < numResults - 1) {
+          chosenResult = document.getElementById(`result-${selectedResult+1}`);
+          chosenResult && chosenResult.focus();
+          this.setState({ selectedResult: this.state.selectedResult + 1 });
+        }
+        break;
+      case('ArrowUp'):
+        // if press up arrow, check if we are in bounds, then move up 1 result
+        if (selectedResult >= 1) {
+          chosenResult = document.getElementById(`result-${selectedResult-1}`);
+          chosenResult && chosenResult.focus();
+          this.setState({ selectedResult: selectedResult - 1 })
+        }
+        break;
+      default:
+        // for all other keypresses, bring foocus back to search bar
+        const searchBar = document.getElementById("search-bar");
+        searchBar && searchBar.focus();
+        break;
     }
   }
   
