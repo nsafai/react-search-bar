@@ -17,11 +17,11 @@
 }
 
 .search-bar:hover {
-  box-shadow: 2px 3px 10px -2px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 3px 10px -2px rgba(50, 50, 50, 0.2);
 }
 
 .search-bar:active, .search-bar:focus {
-  box-shadow: 2px 3px 10px -2px rgba(0, 0, 0, 0.5);
+  box-shadow: 2px 3px 10px -2px rgba(50, 50, 50, 0.5);
 }
 
 .all-results {
@@ -37,7 +37,8 @@
 .result {
   padding: 0.33em 1.0em;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  margin-left: 0.5px; /* fixes offset */
 }
 
 .result:hover, .result:focus {
