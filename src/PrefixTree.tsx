@@ -30,7 +30,7 @@ export function createTree(pages: Page[]) {
 
 function insertString(tree: PrefixTree, str: string, url: PrefixTreeNode["url"]) {
     let currentNode: PrefixTreeNode = tree.root;
-    for (const char of str) {        
+    for (const char of str.toLowerCase()) {        
         const childNode = currentNode.children.get(char)
         // if child node doesn't exist yet
         if (childNode === undefined) {
@@ -72,10 +72,10 @@ export function complete(tree: PrefixTree, prefix: string) {
     with the given prefix string. */
     let results: Page[] = [];
     // find node with prefix
-    const node = findNode(tree, prefix);
+    const node = findNode(tree, prefix.toLowerCase());
     if (node) {
         // use traverse from that node to get all possible endings, add them to completions
-        traverse(tree, node, prefix, results)
+        traverse(tree, node, prefix.toLowerCase(), results)
     }
         
     return results
