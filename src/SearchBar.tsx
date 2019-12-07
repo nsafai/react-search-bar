@@ -52,8 +52,12 @@ export class SearchBar extends Component<PublicProps, SearchState> {
           this.setState({ selectedResult: selectedResult - 1 })
         }
         break;
+      case('Enter'):
+        /* if press Enter, do default behavior e.g. (1) do not shift focus to 
+        search bar, and (2) navigate to link */
+        break;
       default:
-        // for all other keypresses, bring foocus back to search bar
+        // for all other keypresses, bring focus back to search bar
         const searchBar = document.getElementById("search-bar");
         searchBar && searchBar.focus();
         break;
