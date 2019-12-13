@@ -1,4 +1,4 @@
-import { Page } from "./SearchBar";
+import { Option } from "./SearchBar";
 
 const START_CHARACTER = ''; // stored in the prefix tree's root node
 
@@ -9,12 +9,12 @@ export type PrefixTree = {
 
 export type PrefixTreeNode = {
     character: string,
-    url?: Page["url"], // only terminal nodes will have a URL
+    value?: Option["value"], // only terminal nodes will have a URL
     terminal: boolean, // this node is the last character of a string
     children: Map<string, PrefixTreeNode>,
 }
   
-export function createTree(pages: Page[]) {
+export function createTree(options: Option[]) {
     const root: PrefixTreeNode = {
         character: START_CHARACTER,
         terminal: false,
@@ -24,11 +24,11 @@ export function createTree(pages: Page[]) {
         size: 0,
         root: root,
     };
-    pages.forEach(page => insertString(tree, page.name, page.url));
+    options.forEach(option => insertString(tree, option.label, option.value));
     return tree;
 }
 
-function insertString(tree: PrefixTree, str: string, url: PrefixTreeNode["url"]) {
+function insertString(tree: PrefixTree, str: string, value?: PrefixTreeNode["value"]) {
     let currentNode: PrefixTreeNode = tree.root;
     for (const char of str.toLowerCase()) {        
         const childNode = currentNode.children.get(char)
@@ -49,17 +49,21 @@ function insertString(tree: PrefixTree, str: string, url: PrefixTreeNode["url"])
     // By this point, 'character' represents last char of the string
     if (currentNode && currentNode.terminal === false) {
         currentNode.terminal = true;
-        currentNode.url = url;
+        if (value !== undefined) {
+            currentNode.value = value;
+        } else {
+            currentNode.value = str;
+        }
         tree.size += 1;
     }
 }
 
-export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, results: Page[]) {
+export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string, results: Option[]) {
     /* Traverse this prefix tree with recursive depth-first traversal.
     Start at the given node and visit each node with the given function. */
-    if (node.terminal && node.url) {
-        const page: Page = { name: prefix, url: node.url }
-        results.push(page);
+    if (node.terminal && node.value) {
+        const option: Option = { label: prefix, value: node.value }
+        results.push(option);
     }
     node.children.forEach((childNode, char) => { 
         const newPrefix = prefix + char;
@@ -70,7 +74,7 @@ export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string,
 export function complete(tree: PrefixTree, prefix: string) {
     /* Return a list of all strings stored in this prefix tree that start
     with the given prefix string. */
-    let results: Page[] = [];
+    let results: Option[] = [];
     // find node with prefix
     const node = findNode(tree, prefix.toLowerCase());
     if (node) {
@@ -106,7 +110,7 @@ export function findNode(tree: PrefixTree, str: string) {
 
 export function strings(tree: PrefixTree) {
     // Return a list of all strings stored in this prefix tree.
-    let results: Page[] = [];
+    let results: Option[] = [];
     traverse(tree, tree.root, "", results)
     return results
 }

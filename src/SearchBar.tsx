@@ -4,12 +4,12 @@ import './SearchBar.css';
 
 export interface PublicProps {
   width?: number;
-  pages: Page[],
+  values: Option[],
 }
 
-export type Page = {
-  name: string,
-  url: string,
+export type Option = {
+  label: string,
+  value?: string,
 }
 
 type SearchState = {
@@ -21,7 +21,7 @@ type SearchState = {
 export class SearchBar extends Component<PublicProps, SearchState> {
   state = {
     searchTerms: '',
-    searchTree: createTree(this.props.pages),
+    searchTree: createTree(this.props.values),
     selectedResult: -1, // default -1 so it goes to index 0 on first keydown
   }
 
@@ -72,13 +72,13 @@ export class SearchBar extends Component<PublicProps, SearchState> {
     if (searchResults.length > 0) {
       resultsElement = searchResults.map((result, idx) => {
         return (
-          <a className="result" href={result.url} id={`result-${idx}`} key={`r-${idx}`}>
-            {result.name}
+          <a className="result" href={result.value} id={`result-${idx}`} key={`r-${idx}`}>
+            {result.label}
           </a>
         );
       });
     } else {
-      resultsElement = <p className="no-result">No results for '{searchTerms}'</p>
+      resultsElement = <p className="no-result">Nothing starts with '{searchTerms}'</p>
     }
 
     return (
@@ -91,7 +91,7 @@ export class SearchBar extends Component<PublicProps, SearchState> {
           value={this.state.searchTerms}
           onChange={this.updateSearch}
         />
-        <div className="all-results" style={searchTerms.length > 0 ? {} : {display: "none"}}>
+        <div className="all-results" style={ searchTerms.length > 0 ? {} : { display: "none" }}>
           {resultsElement}
         </div>
       </div>
