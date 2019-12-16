@@ -1,5 +1,5 @@
-# React SearchBar
-A re-usable React Search Bar component that displays its results
+# React Autocomplete Component
+A lightning fast autocomplete component that displays its own results.
 
 ### Technologies
 React, Typescript

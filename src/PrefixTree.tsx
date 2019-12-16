@@ -1,4 +1,4 @@
-import { Option } from "./SearchBar";
+import { Option } from "./AutocompleteBar";
 
 const START_CHARACTER = ''; // stored in the prefix tree's root node
 

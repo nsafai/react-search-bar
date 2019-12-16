@@ -5,7 +5,7 @@
   outline: none;
 }
 
-.search-bar {
+.autocomplete-bar {
   padding: 0.5em 1em;
   font-size: 1em;
   outline: 0;
@@ -16,11 +16,11 @@
   border-radius: 5px;
 }
 
-.search-bar:hover {
+.autocomplete-bar:hover {
   box-shadow: 2px 3px 10px -2px rgba(50, 50, 50, 0.2);
 }
 
-.search-bar:active, .search-bar:focus {
+.autocomplete-bar:active, .autocomplete-bar:focus {
   box-shadow: 2px 3px 10px -2px rgba(50, 50, 50, 0.5);
 }
 
@@ -32,13 +32,19 @@
   text-align: start;
   border-radius: 5px;
   border: 1px solid #a4b0be;
+  max-height: 20em;
+  overflow: hidden;
 }
 
 .result {
+  border: 0;
   padding: 0.33em 1.0em;
   text-decoration: none;
   border-radius: 4px;
+  margin: 0;
   margin-left: 0.5px; /* fixes offset */
+  text-transform: capitalize;
+  font-size: 0.9em;
 }
 
 .result:hover, .result:focus {

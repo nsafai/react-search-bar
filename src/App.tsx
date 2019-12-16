@@ -1,5 +1,6 @@
 import React from 'react';
-import { SearchBar, Option } from './SearchBar';
+import { AutocompleteBar, Option } from './AutocompleteBar';
+import { listOfCountries } from './Countries';
 import './App.css';
 
 const App: React.FC = () => {
@@ -13,8 +14,8 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      {/* <SearchBar values={pages.map(value => { return { label: value.label }})} /> */}
-      <SearchBar values={pages} />
+      {/* <AutocompleteBar values={pages} /> */}
+      <AutocompleteBar values={listOfCountries} placeholderText={"Enter country name"} />
     </div>
   );
 }
