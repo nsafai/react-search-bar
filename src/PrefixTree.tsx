@@ -63,7 +63,6 @@ export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string,
     Start at the given node and visit each node with the given function. */
     if (node.terminal && node.value) {
         const option: Option = { label: prefix, value: node.value };
-        console.log(option);
         results.push(option);
     }
     node.children.forEach((childNode, char) => { 
