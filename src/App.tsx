@@ -1,16 +1,16 @@
 import React from 'react';
-import { AutocompleteBar, Option } from './AutocompleteBar';
+import { AutocompleteBar } from './AutocompleteBar';
 import { listOfCountries } from './Countries';
 import './App.css';
 
 const App: React.FC = () => {
-  const pages: Option[] = [
-    {label: "Home", value: "/"}, 
-    {label: "About", value: "/about"},
-    {label: "Adam's website", value: "/adam"},
-    {label: "Google", value: "http://www.google.com"}, 
-    {label: "Reddit", value: "http://www.reddit.com"},
-  ];
+  // const pages: Option[] = [
+  //   {label: "Home", value: "/"}, 
+  //   {label: "About", value: "/about"},
+  //   {label: "Adam's website", value: "/adam"},
+  //   {label: "Google", value: "http://www.google.com"}, 
+  //   {label: "Reddit", value: "http://www.reddit.com"},
+  // ];
 
   return (
     <div className="App">

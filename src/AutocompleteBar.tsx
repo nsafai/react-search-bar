@@ -4,13 +4,13 @@ import './AutocompleteBar.css';
 
 export interface PublicProps {
   placeholderText?: string,
-  type?: AutocompleteType,
+  type?: ResultType,
   values: Option[],
 }
 
 export type Option = {
   label: string,
-  value?: string,
+  value?: string, // if no value is passed, label is used as value
 }
 
 type SearchState = {
@@ -19,9 +19,9 @@ type SearchState = {
   selectedResult: number,
 }
 
-enum AutocompleteType {
-  DEFAULT = "DEFAULT",
-  NAVFILTER = "NAVFILTER"
+enum ResultType {
+  TEXT = "TEXT",
+  LINK = "LINK"
 }
 
 export class AutocompleteBar extends Component<PublicProps, SearchState> {
@@ -33,7 +33,7 @@ export class AutocompleteBar extends Component<PublicProps, SearchState> {
 
   static defaultProps = {
     placeholderText: "Enter search terms",
-    type: AutocompleteType.DEFAULT,
+    type: ResultType.TEXT,
   }
 
   updateSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,8 +45,7 @@ export class AutocompleteBar extends Component<PublicProps, SearchState> {
 
   handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>, numResults: number) => {
     const { selectedResult } = this.state;
-    let chosenResult;
-    console.log("pressed", e.key, "and selectedresult", selectedResult)
+    let chosenResult: any;
     switch(e.key) {
       case('ArrowDown'):
         // if press down arrow, check if we are in bounds, then move down 1 result
@@ -65,11 +64,15 @@ export class AutocompleteBar extends Component<PublicProps, SearchState> {
         }
         break;
       case('Enter'):
-        /* if press Enter, do not shift focus to search bar as for other keypresses 
-        Instead either:
-        - fill input box with value for AutocompleteType.DEFAULT
-        - navigate to link for AutocompleteType.NAVFILTER
-        */
+        // if press Enter, do not shift focus to search bar as for other keypresses. 
+        if (this.props.type === ResultType.TEXT) {
+          chosenResult = document.getElementById(`result-${selectedResult}`);
+          if (chosenResult instanceof HTMLElement) {
+            const searchTerms: string = chosenResult.innerHTML;
+            this.setState({ searchTerms });
+          }
+        }
+        // if props.type === ResultType.LINK, we can use default Enter behavior, nav to link
         break;
       default:
         // for all other keypresses, bring focus back to search bar
@@ -82,20 +85,19 @@ export class AutocompleteBar extends Component<PublicProps, SearchState> {
   render() {
     const { searchTerms, searchTree } = this.state;
     const searchResults = complete(searchTree, searchTerms);
-    const numResults = searchResults.length;
     let resultsElement;
 
     // if there is at least one result for user's search terms
     if (searchResults.length > 0) {
       resultsElement = searchResults.map((result, idx) => {
-        if (this.props.type === AutocompleteType.NAVFILTER) {
+        if (this.props.type === ResultType.LINK) {
           return (
             <a className="result" href={result.value} id={`result-${idx}`} key={`r-${idx}`}>
               {result.label}
             </a>
           );
         } else {
-          return <button className="result" id={`result-${idx}`} key={`r-${idx}`}>{result.label}</button>;
+          return <button className="result" id={`result-${idx}`} key={`r-${idx}`}>{result.value}</button>;
         }
       });
     } else {
@@ -103,7 +105,7 @@ export class AutocompleteBar extends Component<PublicProps, SearchState> {
     }
 
     return (
-      <div className="container" onKeyDown={(e) => this.handleKeyPress(e, numResults)}>
+      <div className="container" onKeyDown={(e) => this.handleKeyPress(e, searchResults.length)}>
         <input 
           id="autocomplete-bar"
           className="autocomplete-bar" 

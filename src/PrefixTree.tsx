@@ -3,8 +3,8 @@ import { Option } from "./AutocompleteBar";
 const START_CHARACTER = ''; // stored in the prefix tree's root node
 
 export type PrefixTree = {
-  root: PrefixTreeNode;
-  size: number;
+    root: PrefixTreeNode;
+    size: number;
 }
 
 export type PrefixTreeNode = {
@@ -23,7 +23,7 @@ export function createTree(options: Option[]) {
     let tree: PrefixTree = {
         size: 0,
         root: root,
-    };
+    }
     options.forEach(option => insertString(tree, option.label, option.value));
     return tree;
 }
@@ -62,7 +62,8 @@ export function traverse(tree: PrefixTree, node: PrefixTreeNode, prefix: string,
     /* Traverse this prefix tree with recursive depth-first traversal.
     Start at the given node and visit each node with the given function. */
     if (node.terminal && node.value) {
-        const option: Option = { label: prefix, value: node.value }
+        const option: Option = { label: prefix, value: node.value };
+        console.log(option);
         results.push(option);
     }
     node.children.forEach((childNode, char) => { 
@@ -76,13 +77,13 @@ export function complete(tree: PrefixTree, prefix: string) {
     with the given prefix string. */
     let results: Option[] = [];
     // find node with prefix
-    const node = findNode(tree, prefix.toLowerCase());
+    const node = findNode(tree, prefix);
     if (node) {
         // use traverse from that node to get all possible endings, add them to completions
-        traverse(tree, node, prefix.toLowerCase(), results)
+        traverse(tree, node, prefix, results);
     }
         
-    return results
+    return results;
 }
 
 export function findNode(tree: PrefixTree, str: string) {
@@ -91,7 +92,7 @@ export function findNode(tree: PrefixTree, str: string) {
     completely found, return None and the depth of the last matching node.
     Search is done iteratively with a loop starting from the root node. */
     if (str.length === 0) {
-        return null
+        return null;
     }
     // start at root node
     let node = tree.root
@@ -101,18 +102,18 @@ export function findNode(tree: PrefixTree, str: string) {
                 node = childNode;
         } else {
             // no matches for latest char in string
-            return null
+            return null;
         }
     }
     // found matches for every char in string
-    return node
+    return node;
 }
 
 export function strings(tree: PrefixTree) {
     // Return a list of all strings stored in this prefix tree.
     let results: Option[] = [];
-    traverse(tree, tree.root, "", results)
-    return results
+    traverse(tree, tree.root, "", results);
+    return results;
 }
 
 export function contains(tree: PrefixTree, str: string) {
